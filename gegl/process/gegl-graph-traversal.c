@@ -248,8 +248,7 @@ gegl_graph_prepare (GeglGraphTraversal *path)
 void
 gegl_graph_prepare_request (GeglGraphTraversal  *path,
                             const GeglRectangle *request_roi,
-                            gint                 level,
-                            bool recompute)
+                            gint                 level)
 {
   GList *list_iter = NULL;
   static const GeglRectangle empty_rect = {0, 0, 0, 0};
