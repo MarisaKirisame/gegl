@@ -490,7 +490,7 @@ gegl_graph_process (GeglGraphTraversal *path,
                */
               zombie_manager_prepare(zombie);
               if (path->recompute) {
-                gprintf("did work\n");
+                g_printf("did work\n");
               }
               gegl_operation_process (operation, context, "output", &context->need_rect, context->level);
               operation_result = GEGL_BUFFER (gegl_operation_context_get_object (context, "output"));
