@@ -96,6 +96,7 @@ _gegl_graph_do_build (GeglGraphTraversal *path, GeglNode *node)
                                           NULL,
                                           (GDestroyNotify)gegl_operation_context_destroy);
   path->rects_dirty = FALSE;
+  path->recompute = FALSE;
 }
 
 /**
@@ -247,7 +248,8 @@ gegl_graph_prepare (GeglGraphTraversal *path)
 void
 gegl_graph_prepare_request (GeglGraphTraversal  *path,
                             const GeglRectangle *request_roi,
-                            gint                 level)
+                            gint                 level,
+                            bool recompute)
 {
   GList *list_iter = NULL;
   static const GeglRectangle empty_rect = {0, 0, 0, 0};
