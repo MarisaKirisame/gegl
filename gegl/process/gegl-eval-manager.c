@@ -141,6 +141,8 @@ GeglEvalManager * gegl_eval_manager_new     (GeglNode    *node,
   /* FIXME: This should be a weakref */
   self->node = node;
 
+  self->recompute = false;
+
   if (pad_name)
     self->pad_name = g_strdup (pad_name);
   else
@@ -150,4 +152,8 @@ GeglEvalManager * gegl_eval_manager_new     (GeglNode    *node,
                     G_CALLBACK (gegl_eval_manager_change_notification),
                     self);
   return self;
+}
+
+void gegl_eval_manager_recompute (GeglEvalManager* em) {
+  em->recompute = true;
 }

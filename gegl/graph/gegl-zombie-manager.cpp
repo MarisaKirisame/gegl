@@ -222,6 +222,7 @@ struct _GeglZombieManager {
         // may god forgive my sin.
         g_rec_mutex_unlock(&GEGL_BUFFER(node->cache)->tile_storage->mutex);
         GeglEvalManager * em = gegl_eval_manager_new(node, "output");
+        gegl_eval_manager_recompute(em);
         gegl_eval_manager_apply(em, &roi, z);
         g_rec_mutex_lock(&GEGL_BUFFER(node->cache)->tile_storage->mutex);
         gegl_cache_computed(node->cache, &roi, z);
