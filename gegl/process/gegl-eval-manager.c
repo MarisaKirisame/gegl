@@ -31,6 +31,8 @@
 
 #include "process/gegl-graph-traversal.h"
 
+#include "process/gegl-graph-traversal-private.h"
+
 static void gegl_eval_manager_class_init (GeglEvalManagerClass *klass);
 static void gegl_eval_manager_init (GeglEvalManager *self);
 static void gegl_eval_manager_finalize (GObject *self_object);
