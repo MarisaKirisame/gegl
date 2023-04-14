@@ -330,7 +330,7 @@ gegl_graph_prepare_request (GeglGraphTraversal  *path,
       {
         /* Expand request if the operation has a minimum processing requirement */
         GeglRectangle full_request = gegl_operation_get_cached_region (operation, request);
-        if (recompute) {
+        if (em->recompute) {
           full_request = request;
         }
 
