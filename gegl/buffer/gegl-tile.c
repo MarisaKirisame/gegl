@@ -176,7 +176,7 @@ gegl_tile_dup (GeglTile *src)
    */
   tile->rev++;
 
-  gegl_tile_read_unlock(src);
+  //gegl_tile_read_unlock(src);
   return tile;
 }
 
