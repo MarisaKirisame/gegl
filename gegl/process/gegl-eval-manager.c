@@ -87,8 +87,10 @@ gegl_eval_manager_prepare (GeglEvalManager *self)
 
   if (self->state != READY)
     {
-      if (!self->traversal)
+      if (!self->traversal) {
         self->traversal = gegl_graph_build (self->node);
+        self->traversal->recompute = self->recompute;
+      }
       else
         gegl_graph_rebuild (self->traversal, self->node);
 
@@ -143,6 +145,8 @@ GeglEvalManager * gegl_eval_manager_new     (GeglNode    *node,
   /* FIXME: This should be a weakref */
   self->node = node;
 
+  self->recompute = FALSE:
+
   if (pad_name)
     self->pad_name = g_strdup (pad_name);
   else
@@ -155,5 +159,5 @@ GeglEvalManager * gegl_eval_manager_new     (GeglNode    *node,
 }
 
 void gegl_eval_manager_recompute (GeglEvalManager* em) {
-  em->traversal->recompute = true;
+  em->recompute = TRUE;
 }
