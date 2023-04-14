@@ -484,14 +484,17 @@ gegl_graph_process (GeglGraphTraversal *path,
 
               context->level = level;
 
-	      GeglZombieManager* zombie = gegl_node_get_zombie_manager(node);
+              GeglZombieManager* zombie = gegl_node_get_zombie_manager(node);
               /* note: this hard-coding of "output" makes some more custom
                * graph topologies harder than necessary.
                */
-	      zombie_manager_prepare(zombie);
+              zombie_manager_prepare(zombie);
+              if (path->recompute) {
+                gprintf("did work\n");
+              }
               gegl_operation_process (operation, context, "output", &context->need_rect, context->level);
               operation_result = GEGL_BUFFER (gegl_operation_context_get_object (context, "output"));
-	      zombie_manager_commit(zombie, operation_result, &context->need_rect, context->level);
+              zombie_manager_commit(zombie, operation_result, &context->need_rect, context->level);
 
               if (operation_result && operation_result == (GeglBuffer *)operation->node->cache)
                 gegl_cache_computed (operation->node->cache, &context->need_rect, level);
