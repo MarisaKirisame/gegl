@@ -178,13 +178,14 @@ struct _GeglZombieManager {
   ZombieTile MakeZombieTile(Key k) {
     lock_guard lg(zombie_mutex);
     // todo: calculate parent dependency
+    auto tile_size = GetTileSize();
     if (node->cache != nullptr) {
-      ZombieTile zt(bindZombie([](){ return ZombieTile(Proxy(GetTileSize())); }));
+      ZombieTile zt(bindZombie([tile_size](){ return ZombieTile(tile_size); }));
       zt.evict(); // doing a single eviction to make sure we can recompute
       return zt;
     } else {
-      return bindZombie([](){
-        ZombieTile zt(Proxy(GetTileSize()));
+      return bindZombie([tile_size](){
+        ZombieTile zt(Proxy(tile_size));
         zt.evict();
         return zt;
       });
