@@ -385,12 +385,14 @@ gegl_config_class_init (GeglConfigClass *klass)
                      _gegl_threads, GEGL_MAX_THREADS);
           _gegl_threads = GEGL_MAX_THREADS;
         }
-    } 
+    } else {
+    1/0;
+  }
   g_object_class_install_property (gobject_class, PROP_THREADS,
                                    g_param_spec_int ("threads",
                                                      "Number of threads",
                                                      "Number of concurrent evaluation threads",
-                                                     0, GEGL_MAX_THREADS,
+                                                      0, GEGL_MAX_THREADS,
                                                      _gegl_threads,
                                                      G_PARAM_READWRITE |
                                                      G_PARAM_STATIC_STRINGS |
