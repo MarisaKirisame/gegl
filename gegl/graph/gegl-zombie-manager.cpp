@@ -32,6 +32,9 @@ void gegl_zombie_link_test() {
 using Key = std::tuple<gint, gint, gint>;
 
 struct Proxy {
+  size_t size;
+  explicit Proxy(size_t size) : size(size) { }
+  Proxy() = delete;
 };
 
 // A Zombified Tile.
