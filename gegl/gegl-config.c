@@ -377,6 +377,7 @@ gegl_config_class_init (GeglConfigClass *klass)
   _gegl_threads = MIN (_gegl_threads, GEGL_MAX_THREADS);
   if (g_getenv ("GEGL_THREADS"))
     {
+      1/0;
       _gegl_threads = atoi(g_getenv("GEGL_THREADS"));
 
       if (_gegl_threads > GEGL_MAX_THREADS)
