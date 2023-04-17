@@ -163,16 +163,22 @@ struct _GeglZombieManager {
     return GetTile(k, lg);
   }
 
+  size_t GetTileSize() const {
+    assert(tile);
+    // 4 from rgba
+    return tile.value()->width * wild.value() * height * 4;
+  }
+
   ZombieTile MakeZombieTile(Key k) {
     lock_guard lg(zombie_mutex);
     // todo: calculate parent dependency
     if (node->cache != nullptr) {
-      ZombieTile zt(bindZombie([](){ return ZombieTile(Proxy { }); }));
+      ZombieTile zt(bindZombie([](){ return ZombieTile(Proxy(GetTileSize())); }));
       zt.evict(); // doing a single eviction to make sure we can recompute
       return zt;
     } else {
       return bindZombie([](){
-        ZombieTile zt(Proxy { });
+        ZombieTile zt(Proxy(GetTileSize()));
         zt.evict();
         return zt;
       });
@@ -281,7 +287,7 @@ struct _GeglZombieManager {
     // todo: we want to record time here
   }
 
-  std::vector<GeglRectangle> split_to_tiles(const GeglRectangle& roi) const {
+  std::vector<GeglRectangle> SplitToTiles(const GeglRectangle& roi) const {
     assert(initialized);
     std::vector<GeglRectangle> ret;
     if (this->tile) {
@@ -324,7 +330,7 @@ struct _GeglZombieManager {
         initialized = true;
         this->tile = tile;
       }
-      for (const GeglRectangle& r: split_to_tiles(roi)) {
+      for (const GeglRectangle& r: SplitToTiles(roi)) {
         // todo: we may want more fine grained tracking
         GetTile({r.x, r.y, level}, lg);
       }
