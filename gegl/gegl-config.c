@@ -375,20 +375,6 @@ gegl_config_class_init (GeglConfigClass *klass)
 
   _gegl_threads = g_get_num_processors ();
   _gegl_threads = MIN (_gegl_threads, GEGL_MAX_THREADS);
-  if (g_getenv ("GEGL_THREADS"))
-    {
-      1/0;
-      _gegl_threads = atoi(g_getenv("GEGL_THREADS"));
-
-      if (_gegl_threads > GEGL_MAX_THREADS)
-        {
-          g_warning ("Tried to use %i threads, max is %i",
-                     _gegl_threads, GEGL_MAX_THREADS);
-          _gegl_threads = GEGL_MAX_THREADS;
-        }
-    } else {
-    1/0;
-  }
   g_object_class_install_property (gobject_class, PROP_THREADS,
                                    g_param_spec_int ("threads",
                                                      "Number of threads",
