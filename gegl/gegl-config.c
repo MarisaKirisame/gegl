@@ -375,6 +375,7 @@ gegl_config_class_init (GeglConfigClass *klass)
 
   _gegl_threads = g_get_num_processors ();
   _gegl_threads = MIN (_gegl_threads, GEGL_MAX_THREADS);
+  raise(SIGINT);
   g_object_class_install_property (gobject_class, PROP_THREADS,
                                    g_param_spec_int ("threads",
                                                      "Number of threads",

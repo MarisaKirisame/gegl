@@ -262,7 +262,6 @@ struct _GeglZombieManager {
                    gint              y,
                    gint              z,
                    gpointer          data) {
-    raise(SIGINT);
     auto forward = [&](){
       // why not gegl_node_get_cache? because if this is ever called cache had been set.
       return gegl_buffer_command (GEGL_TILE_SOURCE (node->cache), command, x, y, z, data);
