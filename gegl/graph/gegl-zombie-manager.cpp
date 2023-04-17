@@ -37,6 +37,12 @@ struct Proxy {
   Proxy() = delete;
 };
 
+template<>
+struct GetSize<Proxy> {
+  size_t operator()(const Proxy& p) {
+    return p.size;
+  }
+};
 // A Zombified Tile.
 using ZombieTile = Zombie<Proxy>;
 
