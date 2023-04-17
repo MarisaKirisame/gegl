@@ -1509,7 +1509,7 @@ gegl_tile_backend_swap_cleanup (void)
   if (! writer_thread)
     return;
 
-  g_message("CLENAUP, bytes written to swap: %l", write_total);
+  g_message("CLENAUP, bytes written to swap: %ld", (long)write_total);
 
   g_signal_handlers_disconnect_by_func (
     gegl_buffer_config (),
