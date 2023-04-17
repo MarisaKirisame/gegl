@@ -188,6 +188,7 @@ endif
 
 if buildtype == 'debugoptimized' or buildtype == 'debug'
   cflags_common += '-DGEGL_ENABLE_DEBUG'
+  cflags_common += '-pg'
 endif
 
 cflags_common += [
