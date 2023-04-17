@@ -185,7 +185,7 @@ struct _GeglZombieManager {
       return zt;
     } else {
       return bindZombie([tile_size](){
-        ZombieTile zt(Proxy(tile_size));
+        ZombieTile zt(Proxy{tile_size});
         zt.evict();
         return zt;
       });
