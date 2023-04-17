@@ -91,8 +91,8 @@ install_headers(gegl_headers,
 gegl_ldflags = os_osx ? ['-framework', 'OpenCL'] : []
 
 if buildtype == 'debugoptimized' or buildtype == 'debug'
-  gegl_cflags += 'pg'
-  gegl_ldflags += 'pg'
+  gegl_cflags += '-pg'
+  gegl_ldflags += '-pg'
 endif
 
 opencl_dep = declare_dependency(
