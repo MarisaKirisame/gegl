@@ -281,6 +281,7 @@ gegl_get_option_group (void)
 static void 
 gegl_config_parse_env (GeglConfig *config)
 {
+  1/0;
   if (g_getenv ("GEGL_MIPMAP_RENDERING"))
     {
       const gchar *value = g_getenv ("GEGL_MIPMAP_RENDERING");
