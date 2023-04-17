@@ -237,11 +237,9 @@ struct _GeglZombieManager {
         // we can revert the lock.
         // may god forgive my sin.
         g_rec_mutex_unlock(&GEGL_BUFFER(node->cache)->tile_storage->mutex);
-        std::cout << "recomputing..." << std::endl;
         GeglEvalManager * em = gegl_eval_manager_new(node, "output");
         gegl_eval_manager_recompute(em);
         gegl_eval_manager_apply(em, &roi, z);
-        std::cout << "recompute done!" << std::endl;
         g_rec_mutex_lock(&GEGL_BUFFER(node->cache)->tile_storage->mutex);
         gegl_cache_computed(node->cache, &roi, z);
         {
