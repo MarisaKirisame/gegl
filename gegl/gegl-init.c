@@ -281,7 +281,6 @@ gegl_get_option_group (void)
 static void 
 gegl_config_parse_env (GeglConfig *config)
 {
-  1/0;
   if (g_getenv ("GEGL_MIPMAP_RENDERING"))
     {
       const gchar *value = g_getenv ("GEGL_MIPMAP_RENDERING");
@@ -344,9 +343,7 @@ gegl_config_parse_env (GeglConfig *config)
                      _gegl_threads, GEGL_MAX_THREADS);
           _gegl_threads = GEGL_MAX_THREADS;
         }
-    } else {
-    g_warning("???");
-  }
+    } 
 
   if (g_getenv ("GEGL_USE_OPENCL"))
     {
