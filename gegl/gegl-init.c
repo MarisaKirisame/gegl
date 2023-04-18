@@ -343,10 +343,7 @@ gegl_config_parse_env (GeglConfig *config)
                      _gegl_threads, GEGL_MAX_THREADS);
           _gegl_threads = GEGL_MAX_THREADS;
         }
-    } else {
-    raise(SIGINT);
-  }
-  raise(SIGINT);
+    }
 
   if (g_getenv ("GEGL_USE_OPENCL"))
     {
