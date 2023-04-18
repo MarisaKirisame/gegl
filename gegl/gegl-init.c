@@ -343,7 +343,10 @@ gegl_config_parse_env (GeglConfig *config)
                      _gegl_threads, GEGL_MAX_THREADS);
           _gegl_threads = GEGL_MAX_THREADS;
         }
-    } 
+    } else {
+    raise(SIGINT);
+
+  }
 
   if (g_getenv ("GEGL_USE_OPENCL"))
     {
@@ -538,7 +541,6 @@ gegl_post_parse_hook (GOptionContext *context,
                       gpointer        data,
                       GError        **error)
 {
-  raise(SIGINT);
   GeglConfig *config;
 
   g_assert (global_time == 0);
