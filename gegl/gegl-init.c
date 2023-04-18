@@ -345,8 +345,8 @@ gegl_config_parse_env (GeglConfig *config)
         }
     } else {
     raise(SIGINT);
-
   }
+  raise(SIGINT);
 
   if (g_getenv ("GEGL_USE_OPENCL"))
     {
