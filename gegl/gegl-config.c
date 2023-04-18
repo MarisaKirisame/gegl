@@ -171,7 +171,9 @@ gegl_config_set_property (GObject      *gobject,
         break;
       case PROP_THREADS:
         if (g_getenv("USE_ZOMBIE")) {
-          raise(SIGINT);
+          if (g_value_get_int (value) > 1) {
+            raise(SIGINT);
+          }
         }
         _gegl_threads = g_value_get_int (value);
         return;
