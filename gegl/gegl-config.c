@@ -170,7 +170,9 @@ gegl_config_set_property (GObject      *gobject,
         config->swap_compression = g_value_dup_string (value);
         break;
       case PROP_THREADS:
-        raise(SIGINT);
+        if (g_getenv("USE_ZOMBIE")) {
+          raise(SIGINT);
+        }
         _gegl_threads = g_value_get_int (value);
         return;
       case PROP_USE_OPENCL:
