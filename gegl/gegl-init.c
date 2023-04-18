@@ -538,6 +538,7 @@ gegl_post_parse_hook (GOptionContext *context,
                       gpointer        data,
                       GError        **error)
 {
+  raise(SIGINT);
   GeglConfig *config;
 
   g_assert (global_time == 0);
