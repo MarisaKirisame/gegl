@@ -613,8 +613,9 @@ iir_young_hor_blur (IirYoungBlur1dFunc   real_blur_1D,
                     const Babl          *format,
                     gint                 level)
 {
-  int extend = 256;
-  GeglRectangle* rect = GEGL_RECTANGLE(input_rect->x - extend, input_rect->y, input_rect->width + 2 * extend, input_rect->height);
+  gint extend = 256;
+  GeglRectangle extent = gegl_buffer_get_extent(src);
+  GeglRectangle* rect = GEGL_RECTANGLE(max(input_rect->x - extend, extent->x), input_rect->y, input_rect->width + 2 * extend, input_rect->height);
   GeglRectangle  cur_row = *rect;
   const gint     nc = babl_format_get_n_components (format);
   gfloat        *row = g_new (gfloat, (3 + rect->width + 3) * nc);
