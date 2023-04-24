@@ -149,7 +149,7 @@ get_boundaries (GeglAbyssPolicy   policy,
     {
     case GEGL_ABYSS_CLAMP:
     default:
-      iminus = &buf[nc * 6]; uplus = &buf[nc * (len + 5)];
+      iminus = &buf[nc * 3]; uplus = &buf[nc * (len + 2)];
       break;
 
     case GEGL_ABYSS_NONE:
@@ -613,7 +613,8 @@ iir_young_hor_blur (IirYoungBlur1dFunc   real_blur_1D,
                     const Babl          *format,
                     gint                 level)
 {
-  GeglRectangle* rect = GEGL_RECTANGLE(input_rect->x - 3, input_rect->y, input_rect->width + 6, input_rect->height);
+  int extend = 30;
+  GeglRectangle* rect = GEGL_RECTANGLE(input_rect->x - extend, input_rect->y, input_rect->width + 2 * extend, input_rect->height);
   GeglRectangle  cur_row = *rect;
   const gint     nc = babl_format_get_n_components (format);
   gfloat        *row = g_new (gfloat, (3 + rect->width + 3) * nc);
@@ -635,7 +636,7 @@ iir_young_hor_blur (IirYoungBlur1dFunc   real_blur_1D,
       get_boundaries (policy, row, rect->width, nc, &iminus, &uplus);
       real_blur_1D (row, tmp, b, m, iminus, uplus, rect->width, nc, policy);
 
-      gegl_buffer_set (dst, GEGL_RECTANGLE(cur_row.x + 3, cur_row.y, cur_row.width - 6, cur_row.height), level, format, &row[(3 + 3) * nc],
+      gegl_buffer_set (dst, GEGL_RECTANGLE(cur_row.x + extend, cur_row.y, cur_row.width - 2 * extend, cur_row.height), level, format, &row[(3 + extend) * nc],
                        GEGL_AUTO_ROWSTRIDE);
     }
 
