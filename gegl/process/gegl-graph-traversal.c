@@ -96,6 +96,7 @@ _gegl_graph_do_build (GeglGraphTraversal *path, GeglNode *node)
                                           NULL,
                                           (GDestroyNotify)gegl_operation_context_destroy);
   path->rects_dirty = FALSE;
+  path->recompute = FALSE;
 }
 
 /**
@@ -329,6 +330,9 @@ gegl_graph_prepare_request (GeglGraphTraversal  *path,
       {
         /* Expand request if the operation has a minimum processing requirement */
         GeglRectangle full_request = gegl_operation_get_cached_region (operation, request);
+        if (path->recompute) {
+          full_request = *request;
+        }
 
         gegl_operation_context_set_need_rect (context, &full_request);
 
@@ -438,10 +442,10 @@ gegl_graph_process (GeglGraphTraversal *path,
        list_iter = list_iter->next)
     {
       GeglNode *node = GEGL_NODE (list_iter->data);
-      GeglOperation *operation = node->operation;
+      GeglOperation *operation = node->operation; 
       g_return_val_if_fail (node, NULL);
       g_return_val_if_fail (operation, NULL);
-      
+
       GEGL_INSTRUMENT_START();
 
       operation_result = NULL;
@@ -480,11 +484,14 @@ gegl_graph_process (GeglGraphTraversal *path,
 
               context->level = level;
 
+              GeglZombieManager* zombie = gegl_node_get_zombie_manager(node);
               /* note: this hard-coding of "output" makes some more custom
                * graph topologies harder than necessary.
                */
+              zombie_manager_prepare(zombie);
               gegl_operation_process (operation, context, "output", &context->need_rect, context->level);
               operation_result = GEGL_BUFFER (gegl_operation_context_get_object (context, "output"));
+              zombie_manager_commit(zombie, operation_result, &context->need_rect, context->level);
 
               if (operation_result && operation_result == (GeglBuffer *)operation->node->cache)
                 gegl_cache_computed (operation->node->cache, &context->need_rect, level);
