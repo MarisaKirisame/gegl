@@ -1301,6 +1301,7 @@ gegl_gblur_1d_process (GeglOperation       *operation,
     }
   else
     {
+      printf("fir!!!\n");
       gfloat *cmatrix;
       gint    clen;
 
