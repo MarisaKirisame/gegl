@@ -149,7 +149,7 @@ get_boundaries (GeglAbyssPolicy   policy,
     {
     case GEGL_ABYSS_CLAMP:
     default:
-      iminus = &buf[nc * 3]; uplus = &buf[nc * (len + 2)];
+      iminus = &buf[nc * 6]; uplus = &buf[nc * (len + 5)];
       break;
 
     case GEGL_ABYSS_NONE:
