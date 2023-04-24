@@ -605,7 +605,7 @@ iir_young_blur_1D_rgbA (gfloat           *buf,
 static void
 iir_young_hor_blur (IirYoungBlur1dFunc   real_blur_1D,
                     GeglBuffer          *src,
-                    const GeglRectangle *rect,
+                    const GeglRectangle *input_rect,
                     GeglBuffer          *dst,
                     const gdouble       *b,
                     gdouble            (*m)[3],
@@ -613,6 +613,7 @@ iir_young_hor_blur (IirYoungBlur1dFunc   real_blur_1D,
                     const Babl          *format,
                     gint                 level)
 {
+  GeglRectangle* rect = GEGL_RECTANGLE(input_rect->x - 3, input_rect->y - 3, input_rect->width + 6, input_rect->height + 6);
   GeglRectangle  cur_row = *rect;
   const gint     nc = babl_format_get_n_components (format);
   gfloat        *row = g_new (gfloat, (3 + rect->width + 3) * nc);
@@ -634,7 +635,7 @@ iir_young_hor_blur (IirYoungBlur1dFunc   real_blur_1D,
       get_boundaries (policy, row, rect->width, nc, &iminus, &uplus);
       real_blur_1D (row, tmp, b, m, iminus, uplus, rect->width, nc, policy);
 
-      gegl_buffer_set (dst, &cur_row, level, format, &row[3 * nc],
+      gegl_buffer_set (dst, input_rect, level, format, &row[3 * nc],
                        GEGL_AUTO_ROWSTRIDE);
     }
 
@@ -1302,7 +1303,6 @@ gegl_gblur_1d_process (GeglOperation       *operation,
     }
   else
     {
-      printf("fir!!!\n");
       gfloat *cmatrix;
       gint    clen;
 

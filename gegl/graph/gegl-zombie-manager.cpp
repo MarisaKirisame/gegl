@@ -257,6 +257,7 @@ struct _GeglZombieManager {
     return forward();
   }
 
+  // TODO: I dont think the handling of level is correct
   gpointer command(GeglTileCommand   command,
                    gint              x,
                    gint              y,
