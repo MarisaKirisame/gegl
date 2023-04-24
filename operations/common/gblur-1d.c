@@ -636,7 +636,7 @@ iir_young_hor_blur (IirYoungBlur1dFunc   real_blur_1D,
       get_boundaries (policy, row, rect->width, nc, &iminus, &uplus);
       real_blur_1D (row, tmp, b, m, iminus, uplus, rect->width, nc, policy);
 
-      gegl_buffer_set (dst, GEGL_RECTANGLE(cur_row.x + extend, cur_row.y, cur_row.width - 2 * extend, cur_row.height), level, format, &row[(3 + extend) * nc],
+      gegl_buffer_set (dst, GEGL_RECTANGLE(input_rect->x, cur_row.y, input_rect->width, cur_row.height), level, format, &row[(3 + input_rect->x - rect->x) * nc],
                        GEGL_AUTO_ROWSTRIDE);
     }
 
