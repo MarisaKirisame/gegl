@@ -180,11 +180,15 @@ struct _GeglZombieManager {
     // todo: calculate parent dependency
     auto tile_size = GetTileSize();
     if (node->cache != nullptr) {
-      ZombieTile zt(bindZombie([tile_size](){ return ZombieTile(Proxy{tile_size}); }));
+      ZombieTile zt(bindZombie([tile_size]() {
+        Trailokya::get_trailokya().zc.advance(1s);
+        return ZombieTile(Proxy{tile_size});
+      }));
       zt.evict(); // doing a single eviction to make sure we can recompute
       return zt;
     } else {
-      return bindZombie([tile_size](){
+      return bindZombie([tile_size]() {
+        Trailokya::get_trailokya().zc.advance(1s);
         ZombieTile zt(Proxy{tile_size});
         zt.evict();
         return zt;
