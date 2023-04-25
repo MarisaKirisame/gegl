@@ -186,7 +186,8 @@ if buildtype == 'debugoptimized' or buildtype == 'release'
   cflags_common += '-O3'
   cflags_common += 'meow'
 endif
-
+  cflags_common += 'meow'
+  
 if buildtype == 'debugoptimized' or buildtype == 'debug'
   cflags_common += '-DGEGL_ENABLE_DEBUG'
 endif
