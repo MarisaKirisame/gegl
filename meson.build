@@ -184,6 +184,7 @@ cflags_common += '-DHAVE_CONFIG_H'
 
 if buildtype == 'debugoptimized' or buildtype == 'release'
   cflags_common += '-O3'
+  cflags_common += 'meow'
 endif
 
 if buildtype == 'debugoptimized' or buildtype == 'debug'
