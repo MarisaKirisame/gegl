@@ -123,10 +123,13 @@ bool operator==(const GeglRectangle& lhs, const GeglRectangle& rhs) {
   return lhs.x == rhs.x && lhs.y == rhs.y && lhs.width == rhs.width && lhs.height == rhs.height;
 }
 
+std::string node_name(const GeglNode* node) {
+  return gegl_node_get_operation(node) ? std::string(gegl_node_get_operation(node)) : "";
+}
 struct NodePropertyTable {
   std::unordered_map<std::string, bool> incremental_;
   bool incremental(const GeglNode* node) const {
-    std::string name = std::string(gegl_node_get_operation(node));
+    std::string name = node_name(node);
     if (incremental_.count(name) == 0) {
       std::cout << "incremental of " << name << " unknown" << std::endl;
     }
