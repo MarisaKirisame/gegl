@@ -191,7 +191,7 @@ struct _GeglZombieManager {
   // for those operation we recompute everything when we recompute one place.
   bool incremental;
   std::chrono::time_point<std::chrono::system_clock> start_time;
-  ns total_itme = 0;
+  ns total_time = 0;
   std::optional<GeglRectangle> tile;
   std::unordered_map<Key, ZombieTile> map;
   std::mutex mutex;
