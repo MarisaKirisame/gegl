@@ -123,6 +123,23 @@ bool operator==(const GeglRectangle& lhs, const GeglRectangle& rhs) {
   return lhs.x == rhs.x && lhs.y == rhs.y && lhs.width == rhs.width && lhs.height == rhs.height;
 }
 
+struct NodePropertyTable {
+  std::unordered_map<std::string, bool> incremental_;
+  bool incremental(const GeglNode* node) const {
+    name = std::string(gegl_node_get_operation(node));
+    if (incremental_.count(name) == 0) {
+      std::cout << "incremental of " << name << " unknown" << std::endl;
+    }
+    return incremental_.at(name);
+  }
+  NodePropertyTable() {
+    
+  }
+  static const NodePropertyTable& GetNodePropertyTable() {
+    static NodePropertyTable npt;
+    return npt;
+  }
+};
 // Every tile of the buffer that zombie see is categorized into 3 type:
 // A Zombie, which is a tile that is being managed normally,
 // A PreZombie, which is a tile that had been freshly recorded, waiting to be commit in a bit,
@@ -132,11 +149,14 @@ struct _GeglZombieManager {
   GeglNode* node;
   GWeakRef cache;
   bool initialized = false;
+  // some operation, like reading from a jpeg, is non-incremental.
+  // for those operation we recompute everything when we recompute one place.
+  bool incremental;
   std::optional<GeglRectangle> tile;
   std::unordered_map<Key, ZombieTile> map;
   std::mutex mutex;
 
-  _GeglZombieManager(GeglNode* node) : node(node) {
+  _GeglZombieManager(GeglNode* node) : node(node), NodePropertyTable::GetNodePropertyTable().incremental(node) {
     g_weak_ref_init(&cache, nullptr);
   }
 
@@ -171,8 +191,7 @@ struct _GeglZombieManager {
 
   size_t GetTileSize() const {
     assert(tile);
-    // 4 from rgba
-    return tile.value().width * tile.value().height * 4;
+    return tile.value().size;
   }
 
   ZombieTile MakeZombieTile(Key k) {
@@ -275,6 +294,7 @@ struct _GeglZombieManager {
     if ((!use_zombie()) || (!initialized)) {
       return forward();
     } else {
+      assert(z == 0);
       switch (command) {
       case GEGL_TILE_GET: {
         return tile_get(x, y, z, *reinterpret_cast<GeglTileGetState*>(&data));
