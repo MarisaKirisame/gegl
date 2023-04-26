@@ -28,6 +28,7 @@
 #include "gegl-tile-handler-cache.h"
 #include "gegl-tile-storage.h"
 #include "gegl-debug.h"
+#include <stdint.h>
 
 /*
 #define GEGL_DEBUG_CACHE_HITS
