@@ -145,6 +145,7 @@ struct NodePropertyTable {
     }
   }
   NodePropertyTable() {
+    incremental_["gegl:gblur-1d"] = true;
   }
   static const NodePropertyTable& GetNodePropertyTable() {
     static NodePropertyTable npt;
