@@ -136,7 +136,7 @@ struct Profiler {
     std::lock_guard<std::mutex> lg(m);
     std::string name = node_name(node);
     if (time_table.count(name) == 0) {
-      time_table[name] = 0;
+      time_table[name] = ns(0);
     }
     time_table[name] += time;
   }
