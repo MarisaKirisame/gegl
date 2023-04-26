@@ -146,6 +146,7 @@ struct NodePropertyTable {
   }
   NodePropertyTable() {
     incremental_["gegl:gblur-1d"] = true;
+    incremental_["gegl:jpg-load"] = false;
   }
   static const NodePropertyTable& GetNodePropertyTable() {
     static NodePropertyTable npt;
@@ -216,7 +217,9 @@ struct _GeglZombieManager {
         Trailokya::get_trailokya().zc.fast_forward(1s);
         return ZombieTile(Proxy{tile_size});
       }));
-      zt.evict(); // doing a single eviction to make sure we can recompute
+      if (incremental) {
+        zt.evict(); // doing a single eviction to make sure we can recompute
+      }
       return zt;
     } else {
       return bindZombie([tile_size]() {
