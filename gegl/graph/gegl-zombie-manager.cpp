@@ -141,7 +141,6 @@ struct NodePropertyTable {
     }
   }
   NodePropertyTable() {
-    incremental_[""] = true;
   }
   static const NodePropertyTable& GetNodePropertyTable() {
     static NodePropertyTable npt;
@@ -164,7 +163,7 @@ struct _GeglZombieManager {
   std::unordered_map<Key, ZombieTile> map;
   std::mutex mutex;
 
-  _GeglZombieManager(GeglNode* node) : node(node), incremental(NodePropertyTable::GetNodePropertyTable().incremental(node)) {
+  _GeglZombieManager(GeglNode* node) : node(node) {
     g_weak_ref_init(&cache, nullptr);
   }
 
@@ -368,6 +367,7 @@ struct _GeglZombieManager {
         }
         initialized = true;
         this->tile = tile;
+        this->incremental = NodePropertyTable::GetNodePropertyTable().incremental(node);
       }
       for (const GeglRectangle& r: SplitToTiles(roi)) {
         // todo: we may want more fine grained tracking
