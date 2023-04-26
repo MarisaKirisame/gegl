@@ -249,7 +249,7 @@ struct _GeglZombieManager {
         return ZombieTile(Proxy{tile_size});
       }));
       if (incremental) {
-        zt.evict(); // doing a single eviction to make sure we can recompute
+        // zt.evict(); // doing a single eviction to make sure we can recompute
       }
       return zt;
     } else {
