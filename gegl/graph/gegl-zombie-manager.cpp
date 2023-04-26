@@ -131,26 +131,20 @@ struct NodePropertyTable {
   std::unordered_map<std::string, bool> incremental_;
   bool incremental(const GeglNode* node) const {
     if (use_zombie()) {
-      std::string name = node_name(node);
-      if (incremental_.count(name) == 0) {
-        std::cout << "incremental of " << name << " unknown" << std::endl;
+      if (node->cache != nullptr) {
+        std::string name = node_name(node);
+        if (incremental_.count(name) == 0) {
+          std::cout << "incremental of " << name << " unknown" << std::endl;
+        }
+        return incremental_.at(name);
+      } else {
+        return true;
       }
-      return incremental_.at(name);
     } else {
       return false;
     }
   }
   NodePropertyTable() {
-    incremental_["gimp:buffer-source-validate"] = true;
-    incremental_["gegl:nop"] = true;
-    incremental_["gegl:translate"] = true;
-    incremental_["gegl:crop"] = true;
-    incremental_["gimp:desaturate"] = true;
-    incremental_["gimp:replace"] = true;
-    incremental_["gimp:mask-components"] = true;
-    incremental_["gegl:write-buffer"] = true;
-    incremental_["gegl:invert-gamma"] = true;
-    incremental_["gegl:buffer-source"] = true;
   }
   static const NodePropertyTable& GetNodePropertyTable() {
     static NodePropertyTable npt;
