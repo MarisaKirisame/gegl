@@ -1313,6 +1313,8 @@ gegl_gblur_1d_process (GeglOperation       *operation,
     }
   else
     {
+      printf("fir not fixed yet\n");
+      exit(1);
       gfloat *cmatrix;
       gint    clen;
 

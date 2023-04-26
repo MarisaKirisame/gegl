@@ -400,7 +400,7 @@ struct _GeglZombieManager {
       lock_guard lg(mutex);
       if (!initialized) {
         if (true) {
-          std::cout << "name: " << std::string(gegl_node_get_operation(node)) << std::endl;
+          std::cout << "name: " << node_name(node) << std::endl;
           std::cout << "cache:" << ((node->cache != nullptr) ? "yes" : "no") << std::endl;
           std::cout << "bb:   " << gegl_node_get_bounding_box(node) << std::endl;
           std::cout << "roi:  " << roi << std::endl;
