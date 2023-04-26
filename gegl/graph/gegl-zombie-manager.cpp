@@ -126,6 +126,7 @@ bool operator==(const GeglRectangle& lhs, const GeglRectangle& rhs) {
 std::string node_name(const GeglNode* node) {
   return gegl_node_get_operation(node) ? std::string(gegl_node_get_operation(node)) : "";
 }
+
 struct NodePropertyTable {
   std::unordered_map<std::string, bool> incremental_;
   bool incremental(const GeglNode* node) const {
@@ -140,7 +141,7 @@ struct NodePropertyTable {
     }
   }
   NodePropertyTable() {
-    
+    incremental_[""] = true;
   }
   static const NodePropertyTable& GetNodePropertyTable() {
     static NodePropertyTable npt;
