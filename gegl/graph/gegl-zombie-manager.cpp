@@ -149,7 +149,7 @@ struct Profiler {
   ~Profiler() {
     
   }
-}
+};
 
 struct NodePropertyTable {
   std::unordered_map<std::string, bool> incremental_;
