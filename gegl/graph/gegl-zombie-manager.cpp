@@ -147,6 +147,7 @@ struct NodePropertyTable {
   NodePropertyTable() {
     incremental_["gegl:gblur-1d"] = true;
     incremental_["gegl:jpg-load"] = false;
+    incremental_["gegl:nop"] = true;
   }
   static const NodePropertyTable& GetNodePropertyTable() {
     static NodePropertyTable npt;
