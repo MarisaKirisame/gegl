@@ -150,6 +150,7 @@ struct NodePropertyTable {
     incremental_["gimp:mask-components"] = true;
     incremental_["gegl:write-buffer"] = true;
     incremental_["gegl:invert-gamma"] = true;
+    incremental_["gegl:buffer-source"] = true;
   }
   static const NodePropertyTable& GetNodePropertyTable() {
     static NodePropertyTable npt;
