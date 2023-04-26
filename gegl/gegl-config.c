@@ -335,6 +335,9 @@ gegl_config_class_init (GeglConfigClass *klass)
     if (default_tile_cache_size < mem_min)
       default_tile_cache_size = mem_min;
 
+    if (g_getenv("TILE_CACHE_SIZE")) {
+      default_tile_cache_size = atoi(g_getenv("TILE_CACHE_SIZE")) >> 20;
+    }
   g_object_class_install_property (gobject_class, PROP_TILE_CACHE_SIZE,
                                    g_param_spec_uint64 ("tile-cache-size",
                                                         "Tile Cache size",
