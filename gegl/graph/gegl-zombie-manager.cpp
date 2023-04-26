@@ -129,11 +129,15 @@ std::string node_name(const GeglNode* node) {
 struct NodePropertyTable {
   std::unordered_map<std::string, bool> incremental_;
   bool incremental(const GeglNode* node) const {
-    std::string name = node_name(node);
-    if (incremental_.count(name) == 0) {
-      std::cout << "incremental of " << name << " unknown" << std::endl;
+    if (use_zombie()) {
+      std::string name = node_name(node);
+      if (incremental_.count(name) == 0) {
+        std::cout << "incremental of " << name << " unknown" << std::endl;
+      }
+      return incremental_.at(name);
+    } else {
+      return false;
     }
-    return incremental_.at(name);
   }
   NodePropertyTable() {
     
