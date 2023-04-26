@@ -191,7 +191,8 @@ struct _GeglZombieManager {
 
   size_t GetTileSize() const {
     assert(tile);
-    return tile.value().size;
+    // we are assuming float, and rgba
+    return tile.value().width * tile.value().height * 4 * 4;
   }
 
   ZombieTile MakeZombieTile(Key k) {
