@@ -127,6 +127,30 @@ std::string node_name(const GeglNode* node) {
   return gegl_node_get_operation(node) ? std::string(gegl_node_get_operation(node)) : "";
 }
 
+struct Profiler {
+  std::mutex m;
+
+  std::unordered_map<std::string, ns> time_table;
+
+  void record(const GeglNode* node, ns time) {
+    std::lock_guard<std::mutex> lg(m);
+    std::string name = node_name(node);
+    if (time_table.count(name) == 0) {
+      time_table[name] = 0;
+    }
+    time_table[name] += time;
+  }
+
+  static Profiler& GetProfiler() {
+    static Profiler profiler;
+    return profiler;
+  }
+
+  ~Profiler() {
+    
+  }
+}
+
 struct NodePropertyTable {
   std::unordered_map<std::string, bool> incremental_;
   bool incremental(const GeglNode* node) const {
@@ -166,6 +190,8 @@ struct _GeglZombieManager {
   // some operation, like reading from a jpeg, is non-incremental.
   // for those operation we recompute everything when we recompute one place.
   bool incremental;
+  std::chrono::time_point<std::chrono::system_clock> start_time;
+  ns total_itme = 0;
   std::optional<GeglRectangle> tile;
   std::unordered_map<Key, ZombieTile> map;
   std::mutex mutex;
@@ -175,6 +201,7 @@ struct _GeglZombieManager {
   }
 
   ~_GeglZombieManager() {
+    Profiler::GetProfiler().record(node->operation, total_time);
     g_clear_object (&node->cache);
     gpointer cache_strong = g_weak_ref_get(&cache);
     if (cache_strong != nullptr) {
@@ -331,7 +358,7 @@ struct _GeglZombieManager {
   }
 
   void prepare() {
-    // todo: we want to record time here
+    start_time = std::chrono::system_clock::now();
   }
 
   std::vector<GeglRectangle> SplitToTiles(const GeglRectangle& roi) const {
@@ -359,6 +386,7 @@ struct _GeglZombieManager {
 	      GeglBuffer* buffer,
 	      gint level) {
     if (use_zombie()) {
+      total_time += std::chrono::system_clock::now() - start_time;
       std::optional<GeglRectangle> tile;
       if (buffer != nullptr) {
         tile = *GEGL_RECTANGLE (buffer->shift_x,
