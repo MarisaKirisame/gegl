@@ -201,7 +201,7 @@ struct _GeglZombieManager {
   }
 
   ~_GeglZombieManager() {
-    Profiler::GetProfiler().record(node->operation, total_time);
+    Profiler::GetProfiler().record(node, total_time);
     g_clear_object (&node->cache);
     gpointer cache_strong = g_weak_ref_get(&cache);
     if (cache_strong != nullptr) {
