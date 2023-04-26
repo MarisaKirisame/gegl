@@ -142,6 +142,7 @@ struct NodePropertyTable {
   }
   NodePropertyTable() {
     incremental_["gimp:buffer-source-validate"] = true;
+    incremental_["gegl:nop"] = true;
   }
   static const NodePropertyTable& GetNodePropertyTable() {
     static NodePropertyTable npt;
