@@ -1069,6 +1069,7 @@ gegl_tile_cache_init (void)
                     G_CALLBACK (gegl_buffer_config_tile_cache_size_notify), NULL);
   if (g_getenv("TILE_CACHE_SIZE")) {
     uint64_t tile_cache_size = ((uint64_t)(atoi(g_getenv("TILE_CACHE_SIZE")))) >> 20;
+    g_print("TILE_CACHE_SIZE set to %l\n", tile_cache_size);
     gegl_buffer_config()->tile_cache_size = tile_cache_size;
   }
 }
