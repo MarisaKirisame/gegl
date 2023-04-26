@@ -145,6 +145,7 @@ struct NodePropertyTable {
     incremental_["gegl:nop"] = true;
     incremental_["gegl:translate"] = true;
     incremental_["gegl:crop"] = true;
+    incremental_["gimp:desaturate"] = true;
   }
   static const NodePropertyTable& GetNodePropertyTable() {
     static NodePropertyTable npt;
