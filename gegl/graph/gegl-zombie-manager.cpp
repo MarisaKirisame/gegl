@@ -126,7 +126,7 @@ bool operator==(const GeglRectangle& lhs, const GeglRectangle& rhs) {
 struct NodePropertyTable {
   std::unordered_map<std::string, bool> incremental_;
   bool incremental(const GeglNode* node) const {
-    name = std::string(gegl_node_get_operation(node));
+    std::string name = std::string(gegl_node_get_operation(node));
     if (incremental_.count(name) == 0) {
       std::cout << "incremental of " << name << " unknown" << std::endl;
     }
@@ -156,7 +156,7 @@ struct _GeglZombieManager {
   std::unordered_map<Key, ZombieTile> map;
   std::mutex mutex;
 
-  _GeglZombieManager(GeglNode* node) : node(node), NodePropertyTable::GetNodePropertyTable().incremental(node) {
+  _GeglZombieManager(GeglNode* node) : node(node), incremental(NodePropertyTable::GetNodePropertyTable().incremental(node)) {
     g_weak_ref_init(&cache, nullptr);
   }
 
