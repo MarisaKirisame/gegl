@@ -147,7 +147,10 @@ struct Profiler {
   }
 
   ~Profiler() {
-    
+    std::lock_guard<std::mutex> lg(m);
+    for (const auto& p : time_table) {
+      std::cout << "running " << p.first << " took " << double(p.second.count()) / 1e9 << std::endl;
+    }
   }
 };
 
