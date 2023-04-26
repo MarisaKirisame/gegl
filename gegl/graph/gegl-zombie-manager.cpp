@@ -147,6 +147,7 @@ struct NodePropertyTable {
     incremental_["gegl:crop"] = true;
     incremental_["gimp:desaturate"] = true;
     incremental_["gimp:replace"] = true;
+    incremental_["gimp:mask-components"] = true;
   }
   static const NodePropertyTable& GetNodePropertyTable() {
     static NodePropertyTable npt;
