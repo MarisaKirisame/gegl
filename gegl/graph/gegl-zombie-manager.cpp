@@ -24,7 +24,7 @@ struct RecomputeCounter {
   }
 
   ~RecomputeCounter() {
-    std::ostream fs;
+    std::ofstream fs;
     fs.open("recompute.log");
     fs << count << std::endl;
     fs.close();
