@@ -16,10 +16,10 @@
 IMPORT_ZOMBIE(default_config)
 
 struct RecomputeCounter {
+  static RecomputeCounter rc;
   int count = 0;
 
   static void addCount() {
-    static RecomputeCounter rc;
     rc.count++;
   }
 
