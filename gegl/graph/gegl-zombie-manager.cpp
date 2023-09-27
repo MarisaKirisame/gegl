@@ -15,6 +15,22 @@
 
 IMPORT_ZOMBIE(default_config)
 
+struct RecomputeCounter {
+  int count = 0;
+
+  RecomputeCounter& get_counter() {
+    static RecomputeCounter rc;
+    return rc;
+  }
+
+  ~RecomputeCounter() {
+    std::ostream fs;
+    fs.open("recompute.log");
+    fs << count << std::endl;
+    fs.close();
+  }
+};
+
 // last lock in 2 phase locking
 std::mutex zombie_mutex;
 using lock_guard = std::lock_guard<std::mutex>;
@@ -263,6 +279,7 @@ struct _GeglZombieManager {
           lock_guard lg(mutex);
           lock_guard zombie_lg(zombie_mutex);
           GetTile(k, lg).recompute();
+          RecomputeCounter::get_counter.count++;
         }
       }
     }
