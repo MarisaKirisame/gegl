@@ -162,6 +162,8 @@ struct _GeglZombieManager {
 
     std::string max_memory_str = getEnvVar("ZOMBIE_MAX_MEMORY");
 
+    std::cout << "!!!!!   " << max_memory_str << std::endl;
+
     max_memory = std::stoull(max_memory_str, nullptr, 10);   
 
     memoryLog.open("memory.log", std::ios_base::app); 
