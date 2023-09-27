@@ -18,9 +18,9 @@ IMPORT_ZOMBIE(default_config)
 struct RecomputeCounter {
   int count = 0;
 
-  RecomputeCounter& get_counter() {
+  static void addCount() {
     static RecomputeCounter rc;
-    return rc;
+    rc.count++;
   }
 
   ~RecomputeCounter() {
@@ -279,7 +279,7 @@ struct _GeglZombieManager {
           lock_guard lg(mutex);
           lock_guard zombie_lg(zombie_mutex);
           GetTile(k, lg).recompute();
-          RecomputeCounter::get_counter.count++;
+          RecomputeCounter::addCount();
         }
       }
     }
