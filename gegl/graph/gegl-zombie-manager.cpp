@@ -160,11 +160,13 @@ struct _GeglZombieManager {
   _GeglZombieManager(GeglNode* node) : node(node) {
     g_weak_ref_init(&cache, nullptr);
 
-    std::string max_memory_str = getEnvVar("ZOMBIE_MAX_MEMORY");
+    if (use_zombie()) {
+      std::string max_memory_str = getEnvVar("ZOMBIE_MAX_MEMORY");
 
-    max_memory = std::stoull(max_memory_str, nullptr, 10);   
+      max_memory = std::stoull(max_memory_str, nullptr, 10);   
 
-    memoryLog.open("memory.log", std::ios_base::app); 
+      memoryLog.open("memory.log", std::ios_base::app); 
+    }
   }
 
   ~_GeglZombieManager() {
