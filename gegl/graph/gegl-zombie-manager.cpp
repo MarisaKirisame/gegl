@@ -327,7 +327,6 @@ struct _GeglZombieManager {
 
   void prepare() {
     // todo: we want to record time here
-    Trailokya::get_trailokya()
   }
 
   std::vector<GeglRectangle> SplitToTiles(const GeglRectangle& roi) const {
