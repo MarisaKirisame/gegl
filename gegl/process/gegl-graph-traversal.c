@@ -431,7 +431,7 @@ GeglBuffer *
 gegl_graph_process (GeglGraphTraversal *path,
                     gint                level)
 {
-  gegel_process_start();
+  gegl_process_start();
 
   GList *list_iter = NULL;
   GeglBuffer *result = NULL;
@@ -539,7 +539,7 @@ gegl_graph_process (GeglGraphTraversal *path,
       gegl_operation_context_purge (last_context);
     }
 
-  gegel_process_end();
+  gegl_process_end();
 
   return result;
 }
