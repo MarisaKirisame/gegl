@@ -31,6 +31,32 @@ struct RecomputeCounter {
   }
 };
 
+struct ProcessProfiler {
+  ns begin_time, end_time;
+
+  static ProcessProfiler& singleton() {
+    static ProcessProfiler pp;
+    return pp;
+  }
+
+  ~ProcessProfiler() {
+    std::cout << "Log: process time cost: " << end_time - begin_time << std::endl;
+  }
+};
+
+void gegl_process_start() {
+  static bool flag = false;
+  auto& pp = ProcessProfiler::singleton();
+  if (!flag) {
+    flag = true;
+    pp.begin_time = ZombieClock::singleton().time();
+  }
+}
+
+void gegl_process_end() {
+  ProcessProfiler::singleton().end_time = ZombieClock::singleton().time();
+}
+
 // last lock in 2 phase locking
 std::mutex zombie_mutex;
 using lock_guard = std::lock_guard<std::mutex>;
@@ -326,7 +352,7 @@ struct _GeglZombieManager {
   }
 
   void prepare() {
-    // todo: we want to record time here
+
   }
 
   std::vector<GeglRectangle> SplitToTiles(const GeglRectangle& roi) const {
