@@ -40,7 +40,10 @@ struct ProcessProfiler {
   }
 
   ~ProcessProfiler() {
-    std::cout << "Log: process time cost: " << (end_time - begin_time).count() << std::endl;
+    std::ofstream of;
+    of.open("process.log", std::ios::out | std::ios::trunc);
+
+    of << (end_time - begin_time).count() << std::endl;
   }
 };
 
