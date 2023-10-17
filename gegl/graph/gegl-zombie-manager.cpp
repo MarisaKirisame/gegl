@@ -40,7 +40,7 @@ struct ProcessProfiler {
   }
 
   ~ProcessProfiler() {
-    std::cout << "Log: process time cost: " << end_time - begin_time << std::endl;
+    std::cout << "Log: process time cost: " << (end_time - begin_time).count() << std::endl;
   }
 };
 
