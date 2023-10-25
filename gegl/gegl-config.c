@@ -21,6 +21,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include <glib-object.h>
 #include <glib/gprintf.h>
@@ -237,8 +238,7 @@ gegl_config_class_init (GeglConfigClass *klass)
                                                      G_PARAM_STATIC_STRINGS));
 
   {
-    g_getenv("ZOMBIE_MAX_MEMORY");
-    uint64_t default_tile_cache_size = 1025;
+    uint64_t default_tile_cache_size = atoll(g_getenv("ZOMBIE_MAX_MEMORY"));
     uint64_t mem_total = default_tile_cache_size;
     uint64_t mem_min = 512 << 20; // 512mb
     uint64_t mem_available = mem_min;
