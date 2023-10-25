@@ -237,7 +237,7 @@ gegl_config_class_init (GeglConfigClass *klass)
                                                      G_PARAM_STATIC_STRINGS));
 
   {
-    uint64_t default_tile_cache_size = 1024l * 1024 * 1024;
+    uint64_t default_tile_cache_size = atoll(g_getenv("ZOMBIE_MAX_MEMORY"));
     uint64_t mem_total = default_tile_cache_size;
     uint64_t mem_min = 512 << 20; // 512mb
     uint64_t mem_available = mem_min;
