@@ -21,7 +21,6 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
-#include <stdlib.h>
 
 #include <glib-object.h>
 #include <glib/gprintf.h>
