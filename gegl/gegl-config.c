@@ -83,7 +83,13 @@ gegl_config_get_property (GObject    *gobject,
   switch (property_id)
     {
       case PROP_TILE_CACHE_SIZE:
-        g_value_set_uint64 (value, config->tile_cache_size);
+        gchar* zombieMaxMemory = g_getenv("ZOMBIE_MAX_MEMORY");
+        if (zombieMaxMemory == NULL) {
+          g_value_set_uint64 (value, config->tile_cache_size);
+        } else {
+          g_value_set_uint64 (value, g_ascii_strtoull(zombieMaxMemory, NULL, 10));
+        }
+        
         break;
 
       case PROP_CHUNK_SIZE:
@@ -237,8 +243,7 @@ gegl_config_class_init (GeglConfigClass *klass)
                                                      G_PARAM_STATIC_STRINGS));
 
   {
-    g_setenv("ZOMBIE_MAX_MEMORY", "1073741824", false); // not overwrite
-    uint64_t default_tile_cache_size = g_ascii_strtoull(g_getenv("ZOMBIE_MAX_MEMORY"), NULL, 10);
+    uint64_t default_tile_cache_size = 1024l * 1024 * 1024;
     uint64_t mem_total = default_tile_cache_size;
     uint64_t mem_min = 512 << 20; // 512mb
     uint64_t mem_available = mem_min;
