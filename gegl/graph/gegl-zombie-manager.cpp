@@ -11,6 +11,7 @@
 #include "gegl-cache.h"
 #include "gegl-node-private.h"
 #include "gegl-region.h"
+#include "buffer/gegl-tile-alloc.h"
 #include "buffer/gegl-tile-storage.h"
 #include "process/gegl-eval-manager.h"
 
@@ -187,6 +188,7 @@ struct _GeglZombieManager {
   size_t max_memory;
   std::ofstream memoryLog;
   ns process_start, process_end;
+  guint64 alloc_memory = 0;
 
   _GeglZombieManager(GeglNode* node) : node(node) {
     g_weak_ref_init(&cache, nullptr);
@@ -208,6 +210,9 @@ struct _GeglZombieManager {
       g_object_unref(cache_strong);
     }
     g_weak_ref_clear(&cache);
+
+    FILE *alloc_memory_log = fopen("alloc_memory.log", "w");
+    fprintf(alloc_memory_log, "%lu\n", alloc_memory);
 
     memoryLog.close();
   }
@@ -243,6 +248,8 @@ struct _GeglZombieManager {
 
     Trailokya::get_trailokya().reaper.mass_extinction_by_memory(max_memory);
     memoryLog << Trailokya::get_trailokya().space_used.bytes << std::endl;
+
+    alloc_memory = std::max(alloc_memory, gegl_tile_alloc_get_total());
 
     auto tile_size = GetTileSize();
     if (node->cache != nullptr) {
