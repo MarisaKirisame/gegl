@@ -249,7 +249,7 @@ struct _GeglZombieManager {
     Trailokya::get_trailokya().reaper.mass_extinction_by_memory(max_memory);
     memoryLog << Trailokya::get_trailokya().space_used.bytes << std::endl;
 
-    alloc_memory = std::max(alloc_memory, ::gegl_tile_alloc_get_total());
+    alloc_memory = std::max(alloc_memory, gegl_tile_alloc_get_total());
 
     auto tile_size = GetTileSize();
     if (node->cache != nullptr) {
