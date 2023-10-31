@@ -335,6 +335,8 @@ gegl_tile_alloc_init (void)
 {
 }
 
+guint64 max_alloc_total = 0;
+
 void
 gegl_tile_alloc_cleanup (void)
 {
@@ -355,8 +357,6 @@ gegl_tile_alloc_cleanup (void)
   if (block)
     gegl_tile_block_free_mem (block);
 }
-
-guint64 max_alloc_total = 0;
 
 gpointer
 gegl_tile_alloc (gsize size)
