@@ -11,7 +11,7 @@
 #include "gegl-cache.h"
 #include "gegl-node-private.h"
 #include "gegl-region.h"
-#include "../buffer/gegl-tile-alloc.h"
+#include "buffer/gegl-tile-alloc.h"
 #include "buffer/gegl-tile-storage.h"
 #include "process/gegl-eval-manager.h"
 
