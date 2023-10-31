@@ -2,7 +2,6 @@
 
 #include <stdbool.h>
 #include <glib.h>
-#include "buffer/gegl-tile-alloc.h"
 #include "gegl-buffer-backend.h"
 
 #ifdef __cplusplus
