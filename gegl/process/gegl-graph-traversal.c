@@ -431,6 +431,7 @@ GeglBuffer *
 gegl_graph_process (GeglGraphTraversal *path,
                     gint                level)
 {
+  puts("process starts!");
   gegl_process_start();
 
   GList *list_iter = NULL;
