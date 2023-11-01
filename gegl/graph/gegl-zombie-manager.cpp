@@ -6,6 +6,7 @@
 #include <chrono>
 
 #include "zombie/zombie.hpp"
+#include "gegl-buffer.h"
 #include "gegl-zombie-manager.h"
 #include "gegl-zombie-manager-private.h"
 #include "gegl-cache.h"
@@ -88,6 +89,10 @@ struct Proxy {
   Proxy(size_t size, GeglBuffer* buffer_ptr, GeglRectangle rect) 
     : size(size), buffer_ptr(buffer_ptr), rect(rect) { }
   Proxy() = delete;
+
+  ~Proxy() {
+    gegl_buffer_force_clear(buffer_ptr, &rect);
+  }
 };
 
 template<>
