@@ -222,7 +222,7 @@ struct _GeglZombieManager {
     memoryLog.close();
   }
 
-  ZombieTile GetTile(const Key& k, const lock_guard& lg, ns additional_time = 0ns, 
+  ZombieTile GetTile(const Key& k, const lock_guard& lg, ns additional_time,
                      GeglBuffer* buffer_ptr, GeglRectangle rect) {
     // A tile could be not in map, because we are overapproximating.
     // To be more precise, parent(over_approximate(r)) might be bigger then parent(r),
@@ -237,9 +237,20 @@ struct _GeglZombieManager {
     return map.at(k);
   }
 
-  ZombieTile GetTile(const Key& k) {
+  ZombieTile GetTileExisted(const Key& k, const lock_guard& lg) {
+    assert(map.count(k) != 0);
+    return map.at(k);
+  }
+
+  ZombieTile GetTileExisted(const Key& k) {
     lock_guard lg(mutex);
-    return GetTile(k, lg);
+    return GetTileExisted(k, lg);
+  }
+
+  ZombieTile GetTile(const Key& k, ns addtional_time,
+                     GeglBuffer* buffer_ptr, GeglRectangle rect) {
+    lock_guard lg(mutex);
+    return GetTile(k, lg, addtional_time, buffer_ptr, rect);
   }
 
   size_t GetTileSize() const {
@@ -300,7 +311,7 @@ struct _GeglZombieManager {
     case GEGL_TILE_GET_READ: {
       bool should_work = [&](){
         lock_guard lg(mutex);
-        return (map.count(k) != 0) && (GetTile(k, lg).evicted());
+        return (map.count(k) != 0) && (GetTileExisted(k, lg).evicted());
       }();
       if (should_work) {
         GeglRectangle tile = this->tile.value();
@@ -327,7 +338,7 @@ struct _GeglZombieManager {
         {
           lock_guard lg(mutex);
           lock_guard zombie_lg(zombie_mutex);
-          GetTile(k, lg).recompute();
+          GetTileExisted(k, lg).recompute();
           RecomputeCounter::addCount();
         }
       }
