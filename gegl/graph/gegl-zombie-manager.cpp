@@ -83,7 +83,10 @@ using Key = std::tuple<gint, gint, gint>;
 
 struct Proxy {
   size_t size;
-  explicit Proxy(size_t size) : size(size) { }
+  GeglBuffer* buffer_ptr;
+  GeglRectangle rect;
+  Proxy(size_t size, GeglBuffer* buffer_ptr, GeglRectangle rect) 
+    : size(size), buffer_ptr(buffer_ptr), rect(rect) { }
   Proxy() = delete;
 };
 
@@ -214,7 +217,8 @@ struct _GeglZombieManager {
     memoryLog.close();
   }
 
-  ZombieTile GetTile(const Key& k, const lock_guard& lg, ns additional_time = 0ns) {
+  ZombieTile GetTile(const Key& k, const lock_guard& lg, ns additional_time = 0ns, 
+                     GeglBuffer* buffer_ptr, GeglRectangle rect) {
     // A tile could be not in map, because we are overapproximating.
     // To be more precise, parent(over_approximate(r)) might be bigger then parent(r),
     // so the former will have more tile.
@@ -223,7 +227,7 @@ struct _GeglZombieManager {
     // Some gegl operation create a huge tile with only a portion of it being used.
     // If we manage all of those tile overhead will be unbearable.
     if (map.count(k) == 0) {
-      SetTile(k, lg, additional_time);
+      SetTile(k, lg, additional_time, buffer_ptr, rect);
     }
     return map.at(k);
   }
@@ -239,7 +243,7 @@ struct _GeglZombieManager {
     return tile.value().width * tile.value().height * 4;
   }
 
-  ZombieTile MakeZombieTile(Key k, ns additional_time) {
+  ZombieTile MakeZombieTile(Key k, ns additional_time, GeglBuffer* buffer_ptr, GeglRectangle rect) {
     lock_guard lg(zombie_mutex);
     // todo: calculate parent dependency
 
@@ -248,16 +252,16 @@ struct _GeglZombieManager {
 
     auto tile_size = GetTileSize();
     if (node->cache != nullptr) {
-      ZombieTile zt(bindZombie([tile_size, additional_time](){
+      ZombieTile zt(bindZombie([tile_size, additional_time, buffer_ptr, rect](){
                                  ZombieClock::singleton().fast_forward(additional_time);
-                                 return ZombieTile(Proxy{tile_size}); 
+                                 return ZombieTile(Proxy{tile_size, buffer_ptr, rect}); 
                               })
       );
       // zt.evict(); // doing a single eviction to make sure we can recompute
       return zt;
     } else {
-      return bindZombie([tile_size, additional_time](){
-        ZombieTile zt(Proxy{tile_size});
+      return bindZombie([tile_size, additional_time, buffer_ptr, rect](){
+        ZombieTile zt(Proxy{tile_size, buffer_ptr, rect});
         ZombieClock::singleton().fast_forward(additional_time);
         // zt.evict();
         return zt;
@@ -265,14 +269,14 @@ struct _GeglZombieManager {
     }
   }
 
-  void SetTile(const Key& k, const lock_guard& lg, ns additional_time) {
+  void SetTile(const Key& k, const lock_guard& lg, ns additional_time, GeglBuffer* buffer_ptr, GeglRectangle rect) {
     assert(map.count(k) == 0);
-    map.insert({k, MakeZombieTile(k, additional_time)});
+    map.insert({k, MakeZombieTile(k, additional_time, buffer_ptr, rect)});
   }
 
-  void SetTile(const Key& k, ns additional_time) {
+  void SetTile(const Key& k, ns additional_time, GeglBuffer* buffer_ptr, GeglRectangle rect) {
     lock_guard lg(mutex);
-    SetTile(k, lg, additional_time);
+    SetTile(k, lg, additional_time, buffer_ptr, rect);
   }
 
   // todo: avoid tile get reentrant
@@ -389,8 +393,8 @@ struct _GeglZombieManager {
   }
 
   void commit(const GeglRectangle& roi,
-	      GeglBuffer* buffer,
-	      gint level) {
+	            GeglBuffer*          buffer,
+	            gint                 level) {
     if (use_zombie()) {
       process_end = ZombieClock::singleton().time();
 
@@ -414,7 +418,7 @@ struct _GeglZombieManager {
       }
       for (const GeglRectangle& r: SplitToTiles(roi)) {
         // todo: we may want more fine grained tracking
-        GetTile({r.x, r.y, level}, lg, process_end - process_start);
+        GetTile({r.x, r.y, level}, lg, process_end - process_start, buffer, r);
       }
       assert(this->tile == tile);
     }
@@ -452,6 +456,6 @@ void zombie_manager_prepare(GeglZombieManager* self) {
 void zombie_manager_commit(GeglZombieManager*   self,
                            GeglBuffer*          buffer,
                            const GeglRectangle* roi,
-			   gint                 level) {
+			                     gint                 level) {
   self->commit(*roi, buffer, level);
 }
