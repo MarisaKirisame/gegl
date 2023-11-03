@@ -39,7 +39,6 @@ struct ProcessProfiler {
 
   static ProcessProfiler& singleton() {
     static ProcessProfiler pp;
-    puts("!!!!");
     return pp;
   }
 
