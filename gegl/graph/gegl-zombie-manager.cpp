@@ -81,23 +81,30 @@ void gegl_zombie_link_test() {
 
 using Key = std::tuple<gint, gint, gint>;
 
-struct Proxy {
+struct ProxyInside {
   size_t size;
   GeglBuffer* buffer_ptr;
   GeglRectangle rect;
-  Proxy(size_t size, GeglBuffer* buffer_ptr, GeglRectangle rect) 
-    : size(size), buffer_ptr(buffer_ptr), rect(rect) { }
-  Proxy() = delete;
 
-  ~Proxy() {
+  ProxyInside(size_t size, GeglBuffer* buffer_ptr, GeglRectangle rect) 
+    : size(size), buffer_ptr(buffer_ptr), rect(rect) { }
+  ProxyInside() = delete;
+
+  ~ProxyInside() {
     gegl_buffer_clear(buffer_ptr, &rect);
   }
 };
 
+typedef std::unique_ptr<ProxyInside> Proxy;
+
+Proxy make_proxy(size_t size, GeglBuffer* buffer_ptr, GeglRectangle rect) {
+  return std::make_unique<ProxyInside>(new ProxyInside{size, buffer_ptr, rect});
+}
+
 template<>
 struct GetSize<Proxy> {
   size_t operator()(const Proxy& p) {
-    return p.size;
+    return (*p).size;
   }
 };
 // A Zombified Tile.
@@ -269,14 +276,14 @@ struct _GeglZombieManager {
     if (node->cache != nullptr) {
       ZombieTile zt(bindZombie([tile_size, additional_time, buffer_ptr, rect](){
                                  ZombieClock::singleton().fast_forward(additional_time);
-                                 return ZombieTile(Proxy{tile_size, buffer_ptr, rect}); 
+                                 return ZombieTile(make_proxy(tile_size, buffer_ptr, rect)); 
                               })
       );
       // zt.evict(); // doing a single eviction to make sure we can recompute
       return zt;
     } else {
       return bindZombie([tile_size, additional_time, buffer_ptr, rect](){
-        ZombieTile zt(Proxy{tile_size, buffer_ptr, rect});
+        ZombieTile zt(make_proxy(tile_size, buffer_ptr, rect));
         ZombieClock::singleton().fast_forward(additional_time);
         // zt.evict();
         return zt;
