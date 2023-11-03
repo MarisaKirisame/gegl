@@ -91,7 +91,7 @@ struct Proxy {
   Proxy() = delete;
 
   ~Proxy() {
-    gegl_buffer_clear(buffer_ptr, &rect);
+    // gegl_buffer_clear(buffer_ptr, &rect);
   }
 };
 
