@@ -98,7 +98,7 @@ struct ProxyInside {
 typedef std::unique_ptr<ProxyInside> Proxy;
 
 Proxy make_proxy(size_t size, GeglBuffer* buffer_ptr, GeglRectangle rect) {
-  return Proxy(new ProxyInside{size, buffer_ptr, rect});
+  return std::unique_ptr<ProxyInside>(new ProxyInside{size, buffer_ptr, rect});
 }
 
 template<>
