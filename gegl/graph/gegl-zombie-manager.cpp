@@ -91,8 +91,8 @@ struct ProxyInside {
   ProxyInside() = delete;
 
   ~ProxyInside() {
-    puts("Buffer Clear!!!");
-    gegl_buffer_clear(buffer_ptr, &rect);
+    // puts("Buffer Clear!!!");
+    // gegl_buffer_clear(buffer_ptr, &rect);
   }
 };
 
@@ -441,8 +441,7 @@ struct _GeglZombieManager {
         this->tile = tile;
       }
 
-      assert(GEGL_IS_BUFFER(buffer));
-
+      // assert(GEGL_IS_BUFFER(buffer));
       for (const GeglRectangle& r: SplitToTiles(roi)) {
         // todo: we may want more fine grained tracking
         GetTile({r.x, r.y, level}, lg, process_end - process_start, buffer, r);
@@ -484,6 +483,6 @@ void zombie_manager_commit(GeglZombieManager*   self,
                            GeglBuffer*          buffer,
                            const GeglRectangle* roi,
 			                     gint                 level) {
-  assert(GEGL_IS_BUFFER(buffer));
+  // assert(GEGL_IS_BUFFER(buffer));
   self->commit(*roi, buffer, level);
 }
