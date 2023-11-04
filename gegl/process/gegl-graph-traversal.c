@@ -21,6 +21,7 @@
 
 #include <glib-object.h>
 #include <assert.h>
+#include <stdio.h>
 
 #include "gegl-types-internal.h"
 #include "gegl.h"
@@ -494,7 +495,8 @@ gegl_graph_process (GeglGraphTraversal *path,
               zombie_manager_prepare(zombie);
               gegl_operation_process (operation, context, "output", &context->need_rect, context->level);
               operation_result = GEGL_BUFFER (gegl_operation_context_get_object (context, "output"));
-              printf("is buffer: %d\n", GEGL_IS_BUFFER(operation_result));
+              FILE* log = fopen("buffer.log", "a");
+              fprintf(log, "is buffer: %d %d\n", GEGL_IS_BUFFER(operation_result), operation_result == NULL);
               // assert(GEGL_IS_BUFFER(operation_result));
               zombie_manager_commit(zombie, operation_result, &context->need_rect, context->level);
 
