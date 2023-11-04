@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include <glib-object.h>
+#include <assert.h>
 
 #include "gegl-types-internal.h"
 #include "gegl.h"
