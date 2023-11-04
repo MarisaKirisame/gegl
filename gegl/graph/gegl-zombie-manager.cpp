@@ -441,9 +441,7 @@ struct _GeglZombieManager {
         this->tile = tile;
       }
 
-      if (!GEGL_IS_BUFFER(buffer)) {
-        puts("Isnt buffer!");
-      }
+      assert(GEGL_IS_BUFFER(buffer));
 
       for (const GeglRectangle& r: SplitToTiles(roi)) {
         // todo: we may want more fine grained tracking
@@ -486,5 +484,6 @@ void zombie_manager_commit(GeglZombieManager*   self,
                            GeglBuffer*          buffer,
                            const GeglRectangle* roi,
 			                     gint                 level) {
+  assert(GEGL_IS_BUFFER(buffer));
   self->commit(*roi, buffer, level);
 }
