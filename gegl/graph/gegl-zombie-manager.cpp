@@ -91,6 +91,7 @@ struct ProxyInside {
   ProxyInside() = delete;
 
   ~ProxyInside() {
+    puts("Buffer Clear!!!");
     gegl_buffer_clear(buffer_ptr, &rect);
   }
 };
@@ -348,6 +349,7 @@ struct _GeglZombieManager {
           RecomputeCounter::addCount();
         }
       }
+      return forward();
     }
     case GEGL_TILE_GET_PARTIAL_WRITE:
       return forward();
