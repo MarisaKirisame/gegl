@@ -229,7 +229,7 @@ struct _GeglZombieManager {
   }
 
   ZombieTile GetTile(const Key& k, const lock_guard& lg, ns additional_time,
-                     GeglBuffer* buffer_ptr, GeglRectangle rect) {
+                     GeglBuffer* buffer_ptr) {
     // A tile could be not in map, because we are overapproximating.
     // To be more precise, parent(over_approximate(r)) might be bigger then parent(r),
     // so the former will have more tile.
