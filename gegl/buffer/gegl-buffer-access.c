@@ -2810,7 +2810,7 @@ gegl_buffer_clear_tile (GeglBuffer *dst,
     }
 }
 
-static void
+void
 gegl_buffer_force_clear_tile (GeglBuffer *dst,
                               gint        tile_x,
                               gint        tile_y,

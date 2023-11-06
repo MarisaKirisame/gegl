@@ -395,7 +395,7 @@ void            gegl_buffer_clear             (GeglBuffer          *buffer,
 void            gegl_buffer_force_clear       (GeglBuffer          *buffer,
                                                const GeglRectangle *rot);
 
-static void     gegl_buffer_force_clear_tile  (GeglBuffer *dst,
+void            gegl_buffer_force_clear_tile  (GeglBuffer *dst,
                                                gint        tile_x,
                                                gint        tile_y,
                                                gpointer    data);
