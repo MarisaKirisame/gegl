@@ -443,7 +443,7 @@ struct _GeglZombieManager {
       assert(GEGL_IS_BUFFER(buffer));
       for (const GeglRectangle& r: SplitToTiles(roi)) {
         // todo: we may want more fine grained tracking
-        GetTile({r.x, r.y, level}, lg, process_end - process_start, buffer, r);
+        GetTile({r.x, r.y, level}, lg, process_end - process_start, buffer);
       }
       assert(this->tile == tile);
     }
