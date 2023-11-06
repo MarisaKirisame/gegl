@@ -91,7 +91,7 @@ struct ProxyInside {
   ProxyInside() = delete;
 
   ~ProxyInside() {
-    // puts("Buffer Clear!!!");
+    gegl_buffer_force_clear_tile(buffer_ptr, get<0>(key), get<1>(key), NULL);
   }
 };
 
