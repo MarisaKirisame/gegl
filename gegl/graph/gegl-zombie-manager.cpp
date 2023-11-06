@@ -238,7 +238,7 @@ struct _GeglZombieManager {
     // Some gegl operation create a huge tile with only a portion of it being used.
     // If we manage all of those tile overhead will be unbearable.
     if (map.count(k) == 0) {
-      SetTile(k, lg, additional_time, buffer_ptr, rect);
+      SetTile(k, lg, additional_time, buffer_ptr);
     }
     return map.at(k);
   }
@@ -256,7 +256,7 @@ struct _GeglZombieManager {
   ZombieTile GetTile(const Key& k, ns addtional_time,
                      GeglBuffer* buffer_ptr) {
     lock_guard lg(mutex);
-    return GetTile(k, lg, addtional_time, buffer_ptr, key);
+    return GetTile(k, lg, addtional_time, buffer_ptr);
   }
 
   size_t GetTileSize() const {
