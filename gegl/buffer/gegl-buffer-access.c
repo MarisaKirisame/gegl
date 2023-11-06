@@ -2866,7 +2866,6 @@ void
 gegl_buffer_clear (GeglBuffer          *dst,
                    const GeglRectangle *dst_rect)
 {
-  puts(dst == NULL ? "NULL!" : "Not NULL.");
   g_return_if_fail (GEGL_IS_BUFFER (dst));
 
   gegl_buffer_foreach_tile (dst, dst_rect,
