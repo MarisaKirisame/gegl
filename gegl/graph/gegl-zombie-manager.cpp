@@ -94,6 +94,7 @@ struct ProxyInside {
 
   ~ProxyInside() {      
     gegl_buffer_force_clear_tile(buffer_ptr, std::get<0>(key), std::get<1>(key), NULL);
+    std::cout << "!!!!!!!!!!:    " << std::get<0>(key) << "   " << std::get<1>(key) << std::endl;
     g_object_unref(buffer_ptr);
   }
 };
