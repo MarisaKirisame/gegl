@@ -16,7 +16,7 @@
 #include "buffer/gegl-tile-storage.h"
 #include "process/gegl-eval-manager.h"
 
-IMPORT_ZOMBIE(default_config)
+IMPORT_ZOMBIE(lru_config)
 
 struct RecomputeCounter {
   int count = 0;
