@@ -87,11 +87,15 @@ struct ProxyInside {
   Key key;
 
   ProxyInside(size_t size, GeglBuffer* buffer_ptr, Key key) 
-    : size(size), buffer_ptr(buffer_ptr), key(key) { }
+    : size(size), buffer_ptr(buffer_ptr), key(key) {
+      g_object_ref(buffer_ptr);
+     }
   ProxyInside() = delete;
 
   ~ProxyInside() {
-    
+    if (!(std::get<0>(key) == 0 && std::get<1>(key) == 0)) {
+      gegl_buffer_force_clear_tile(buffer_ptr, std::get<0>(key), std::get<1>(key), NULL);
+    }
     g_object_unref(buffer_ptr);
   }
 };
