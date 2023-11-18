@@ -96,6 +96,7 @@ struct ProxyInside {
   ProxyInside() = delete;
 
   ~ProxyInside() {
+    puts("Inside destructing starts");
     GeglBuffer* buffer_ptr = (GeglBuffer*)g_weak_ref_get(&buffer_ref);
 
     if (buffer_ptr != NULL) {
@@ -104,6 +105,7 @@ struct ProxyInside {
       }
       g_object_unref(buffer_ptr);
     }
+    puts("Inside destructing ends");
   }
 };
 
