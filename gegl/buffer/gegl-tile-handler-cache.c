@@ -848,6 +848,12 @@ gegl_tile_handler_cache_remove (GeglTileHandlerCache *cache,
 
       gegl_tile_handler_cache_remove_item (cache, item);
     }
+  else
+    {
+      FILE *file = fopen("proxy.log", "a");
+      fprintf(file, "item eq false!");
+      fclose(file);
+    }
 }
 
 static void
