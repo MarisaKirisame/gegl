@@ -824,7 +824,10 @@ gegl_tile_handler_cache_remove_item (GeglTileHandlerCache *cache,
 
   item->tile->tile_storage = NULL;
   gegl_tile_unref (item->tile);
-  puts("tile unref!");
+
+  FILE *file = fopen("proxy.log", "a");
+  fprintf(file, "tile unref!\n");
+  fclose(file);
 
   g_slice_free (CacheItem, item);
 }
