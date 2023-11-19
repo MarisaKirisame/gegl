@@ -102,9 +102,9 @@ struct ProxyInside {
 
     if (buffer_ptr != NULL) {
       fclose(file);
-      if (!(std::get<0>(key) == 0 && std::get<1>(key) == 0)) {
+      // if (!(std::get<0>(key) == 0 && std::get<1>(key) == 0)) {
         gegl_buffer_force_clear_tile(buffer_ptr, std::get<0>(key), std::get<1>(key), NULL);
-      }
+      // }
       g_object_unref(buffer_ptr);
       file = fopen("proxy.log", "a");
     } else {
