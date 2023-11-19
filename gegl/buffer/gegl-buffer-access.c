@@ -2825,7 +2825,7 @@ gegl_buffer_force_clear_tile (GeglBuffer *dst,
                                       tile_x, tile_y, 0, NULL);
   } else {
     FILE *file = fopen("proxy.log", "a");
-    fprintf(file, "uninitalized!");
+    fprintf(file, "uninitalized!\n");
     fclose(file);
   }
 }

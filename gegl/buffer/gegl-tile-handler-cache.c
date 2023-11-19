@@ -851,7 +851,7 @@ gegl_tile_handler_cache_remove (GeglTileHandlerCache *cache,
   else
     {
       FILE *file = fopen("proxy.log", "a");
-      fprintf(file, "item eq false!");
+      fprintf(file, "item eq false!\n");
       fclose(file);
     }
 }
