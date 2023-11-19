@@ -105,6 +105,8 @@ struct ProxyInside {
         gegl_buffer_force_clear_tile(buffer_ptr, std::get<0>(key), std::get<1>(key), NULL);
       }
       g_object_unref(buffer_ptr);
+    } else {
+      fprintf(file, "buffer_ptr is null\n");
     }
     fprintf(file, "Inside destructing ends\n");
     fclose(file);
