@@ -20,6 +20,8 @@
 #include "config.h"
 
 #include <glib-object.h>
+#include <assert.h>
+#include <stdio.h>
 
 #include "gegl-types-internal.h"
 #include "gegl.h"
@@ -34,6 +36,7 @@
 #include "graph/gegl-callback-visitor.h"
 #include "graph/gegl-visitable.h"
 #include "graph/gegl-connection.h"
+#include "graph/gegl-zombie-manager.h"
 
 #include "process/gegl-graph-traversal.h"
 #include "process/gegl-graph-traversal-private.h"
@@ -411,8 +414,7 @@ gegl_graph_get_shared_empty (GeglGraphTraversal *path)
     }
   return path->shared_empty;
 }
-
-
+  
 /**
  * gegl_graph_process:
  * @path: The traversal path
@@ -431,6 +433,8 @@ GeglBuffer *
 gegl_graph_process (GeglGraphTraversal *path,
                     gint                level)
 {
+  gegl_process_start();
+
   GList *list_iter = NULL;
   GeglBuffer *result = NULL;
   GeglOperationContext *context = NULL;
@@ -491,7 +495,9 @@ gegl_graph_process (GeglGraphTraversal *path,
               zombie_manager_prepare(zombie);
               gegl_operation_process (operation, context, "output", &context->need_rect, context->level);
               operation_result = GEGL_BUFFER (gegl_operation_context_get_object (context, "output"));
-              zombie_manager_commit(zombie, operation_result, &context->need_rect, context->level);
+              if (operation_result) {
+                zombie_manager_commit(zombie, operation_result, &context->need_rect, context->level);
+              }
 
               if (operation_result && operation_result == (GeglBuffer *)operation->node->cache)
                 gegl_cache_computed (operation->node->cache, &context->need_rect, level);
@@ -536,6 +542,8 @@ gegl_graph_process (GeglGraphTraversal *path,
         result = g_object_ref (gegl_graph_get_shared_empty (path));
       gegl_operation_context_purge (last_context);
     }
+
+  gegl_process_end();
 
   return result;
 }
